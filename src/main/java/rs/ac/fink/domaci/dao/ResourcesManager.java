@@ -18,7 +18,7 @@ public class ResourcesManager {
     }
 
     public static Connection getConnection() throws SQLException {
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost/online_shop?user=root&password=");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost/racunarskaoprema?user=root&password=");
         return con;
     }
 

@@ -16,6 +16,15 @@ public class Korisnik implements Serializable{
     public Korisnik() {  
     }
 
+    public Korisnik(String ime_i_prezime, String username, String e_mail, String datum_rodjenja, int stanje_racuna, int kolicina_potrosenog_novca) {
+        this.ime_i_prezime = ime_i_prezime;
+        this.username = username;
+        this.e_mail = e_mail;
+        this.datum_rodjenja = datum_rodjenja;
+        this.stanje_racuna = stanje_racuna;
+        this.kolicina_potrosenog_novca = kolicina_potrosenog_novca;
+    }
+    
     public Korisnik(int korisnik_id, String ime_i_prezime, String username, String e_mail, String datum_rodjenja, int stanje_racuna, int kolicina_potrosenog_novca) {
         this.korisnik_id = korisnik_id;
         this.ime_i_prezime = ime_i_prezime;

@@ -1,1 +1,2 @@
-"# API-REST---prodaja-racunarske-opreme" 
+first commit: Data sloj
+second commit: KorisnikDAO, implementirana get metoda za korisnika
