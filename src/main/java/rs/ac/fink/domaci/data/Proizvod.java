@@ -13,6 +13,13 @@ public class Proizvod implements Serializable{
     public Proizvod() {
     }
     
+    public Proizvod(String naziv, int cena, String vrsta_opreme, int stanje_na_lageru) {
+        this.naziv = naziv;
+        this.cena = cena;
+        this.vrsta_opreme = vrsta_opreme;
+        this.stanje_na_lageru = stanje_na_lageru;
+    }
+    
     public Proizvod(int proizvod_id, String naziv, int cena, String vrsta_opreme, int stanje_na_lageru) {
         this.proizvod_id = proizvod_id;
         this.naziv = naziv;

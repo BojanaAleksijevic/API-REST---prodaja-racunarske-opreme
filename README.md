@@ -3,5 +3,6 @@
 Zadatak: Dizajn aplikacije za radnju računarske opreme
 
 Commit :
-* first: data sloj
-* second: korisnikDAO, korisnikRest, implementirana GET metoda i isprobana
+* data sloj
+* korisnikDAO, korisnikRest, implementirana GET metoda i isprobana
+* Lista svih proizvoda; detaljan prikaz proizvoda
