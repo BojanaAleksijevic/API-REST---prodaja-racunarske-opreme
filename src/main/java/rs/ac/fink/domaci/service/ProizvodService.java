@@ -18,19 +18,31 @@ public class ProizvodService {
         return instance;
     }
     
-    public static List<Proizvod> getAllProizvodi() throws RacunarskaOpremaException {
-        return ProizvodDAO.getAllProizvodi();  // Pozivanje metode iz DAO klase
+    public List<Proizvod> getAllProizvodi() throws RacunarskaOpremaException {
+        return ProizvodDAO.getAllProizvodi();
     }
     
-    public static Proizvod findProduct(int proizvod_id) throws RacunarskaOpremaException {
+    public Proizvod findProduct(String naziv) throws RacunarskaOpremaException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
 
-            return ProizvodDAO.getInstance().find(proizvod_id, con);
+            return ProizvodDAO.getInstance().find(naziv, con);
 
         } catch (SQLException ex) {
-            throw new RacunarskaOpremaException("Failed to find product with name " + proizvod_id, ex);
+            throw new RacunarskaOpremaException("Failed to find product with name " + naziv, ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+    
+    public List<Proizvod> searchProizvodi(Double minCena, Double maxCena, String vrstaOpreme, String naziv) throws RacunarskaOpremaException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+            return ProizvodDAO.getInstance().searchProizvodi(minCena, maxCena, vrstaOpreme, naziv, con);
+        } catch (SQLException ex) {
+            throw new RacunarskaOpremaException("Failed to search products", ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }

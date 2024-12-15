@@ -4,50 +4,49 @@ import java.io.Serializable;
 
 public class Kupovina {
     private int kupovina_id;
-    private Korisnik korisnik_id;
-    private Proizvod proizvod_id;
+    private Korisnik korisnik;
+    private Proizvod proizvod;
     
     public Kupovina() {
         
     }
 
-    public Kupovina(int kupovina_id, Korisnik korisnik_id, Proizvod proizvod_id) {
+    public Kupovina(Korisnik korisnik, Proizvod proizvod) {
+        this.korisnik = korisnik;
+        this.proizvod = proizvod;
+    }
+    
+    public Kupovina(int kupovina_id, Korisnik korisnik, Proizvod proizvod) {
         this.kupovina_id = kupovina_id;
-        this.korisnik_id = korisnik_id;
-        this.proizvod_id = proizvod_id;
+        this.korisnik = korisnik;
+        this.proizvod = proizvod;
     }
 
     public int getKupovina_id() {
         return kupovina_id;
     }
 
-    public Korisnik getKorisnik_id() {
-        return korisnik_id;
+    public Korisnik getKorisnik() {
+        return korisnik;
     }
 
-    public Proizvod getProizvod_id() {
-        return proizvod_id;
+    public Proizvod getProizvod() {
+        return proizvod;
     }
+
+    
 
     public void setKupovina_id(int kupovina_id) {
         this.kupovina_id = kupovina_id;
     }
 
-    public void setKorisnik_id(Korisnik korisnik_id) {
-        this.korisnik_id = korisnik_id;
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
     }
 
-    public void setProizvod_id(Proizvod proizvod_id) {
-        this.proizvod_id = proizvod_id;
+    public void setProizvod(Proizvod proizvod) {
+        this.proizvod = proizvod;
     }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Kupovina{").append("korisnik_id=").append(korisnik_id)
-        .append("proizvod_id=").append(proizvod_id)
-        .append("}");
-        return sb.toString();
-    }
+
     
 }

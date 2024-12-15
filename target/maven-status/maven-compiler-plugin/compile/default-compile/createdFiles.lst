@@ -1,4 +1,5 @@
 rs\ac\fink\domaci\dao\KorisnikDAO.class
+rs\ac\fink\domaci\rest\KupovinaRest.class
 rs\ac\fink\domaci\data\Proizvod.class
 rs\ac\fink\domaci\dao\ResourcesManager.class
 rs\ac\fink\domaci\exception\RacunarskaOpremaException.class
@@ -12,3 +13,5 @@ rs\ac\fink\domaci\data\Pretraga.class
 rs\ac\fink\domaci\dao\ProizvodDAO.class
 rs\ac\fink\domaci\data\Korisnik.class
 rs\ac\fink\domaci\data\PodesavanjePretrage.class
+rs\ac\fink\domaci\dao\KupovinaDAO.class
+rs\ac\fink\domaci\service\KupovinaService.class

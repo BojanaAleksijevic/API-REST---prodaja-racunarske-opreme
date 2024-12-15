@@ -28,7 +28,7 @@ public class KorisnikDAO {
             ps.setString(1, username);
             rs = ps.executeQuery();
             if (rs.next()) {
-                korisnik = new Korisnik(rs.getString("ime_i_prezime"), username, rs.getString("e_mail"), rs.getString("datum_rodjenja"), rs.getInt("stanje_racuna"), rs.getInt("kolicina_potrosenog_novca"));
+                korisnik = new Korisnik(rs.getString("ime_i_prezime"), username, rs.getString("password"), rs.getString("e_mail"), rs.getString("datum_rodjenja"), rs.getInt("stanje_racuna"), rs.getInt("kolicina_potrosenog_novca"));
             }
         } finally {
             ResourcesManager.closeResources(rs, ps);
@@ -41,13 +41,14 @@ public class KorisnikDAO {
         ResultSet rs = null;
         int id = -1;
         try {
-            ps = con.prepareStatement("INSERT INTO korisnik(ime_i_prezime, username, e_mail, datum_rodjenja, stanje_racuna, kolicina_potrosenog_novca) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps = con.prepareStatement("INSERT INTO korisnik(ime_i_prezime, username, password, e_mail, datum_rodjenja, stanje_racuna, kolicina_potrosenog_novca) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, korisnik.getImeIPrezime());
             ps.setString(2, korisnik.getUsername());
-            ps.setString(3, korisnik.getEmail());
-            ps.setString(4, korisnik.getDatumRodjenja());
-            ps.setInt(5, korisnik.getStanjeRacuna());
-            ps.setInt(6, korisnik.getKolicinaPotrosenogNovca());
+            ps.setString(3, korisnik.getPassword());
+            ps.setString(4, korisnik.getEmail());
+            ps.setString(5, korisnik.getDatumRodjenja());
+            ps.setInt(6, korisnik.getStanjeRacuna());
+            ps.setInt(7, korisnik.getKolicinaPotrosenogNovca());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             rs.next();
@@ -58,17 +59,24 @@ public class KorisnikDAO {
         return id;
     }
     
+    
     public void update(Korisnik korisnik, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("UPDATE korisnik SET ime_i_prezime=?, username=?, e_mail=?, datum_rodjenja=?, stanje_racuna=?, kolicina_potrosenog_novca=?  WHERE korisnik_id=?");
+            ps = con.prepareStatement("UPDATE korisnik SET ime_i_prezime=?, username=?, password=?, e_mail=?, datum_rodjenja=?, stanje_racuna=?, kolicina_potrosenog_novca=?  WHERE username=?");
             ps.setString(1, korisnik.getImeIPrezime());
             ps.setString(2, korisnik.getUsername());
-            ps.setString(3, korisnik.getEmail());
-            ps.setString(4, korisnik.getDatumRodjenja());
-            ps.setInt(5, korisnik.getStanjeRacuna());
-            ps.setInt(6, korisnik.getKolicinaPotrosenogNovca());
+            ps.setString(3, korisnik.getPassword());
+            ps.setString(4, korisnik.getEmail());
+            
+            ps.setString(5, korisnik.getDatumRodjenja());
+            ps.setInt(6, korisnik.getStanjeRacuna());
+            ps.setInt(7, korisnik.getKolicinaPotrosenogNovca());
+            
+            
             ps.executeUpdate();
+            
+            
         } finally {
             ResourcesManager.closeResources(null, ps);
         }

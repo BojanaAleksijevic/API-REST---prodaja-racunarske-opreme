@@ -1,5 +1,6 @@
 package rs.ac.fink.domaci.rest;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -8,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import rs.ac.fink.domaci.data.Korisnik;
 import rs.ac.fink.domaci.exception.RacunarskaOpremaException;
 import rs.ac.fink.domaci.service.KorisnikService;
@@ -17,12 +19,22 @@ import rs.ac.fink.domaci.service.KorisnikService;
 public class KorisnikRest {
     private final KorisnikService korisnikService = KorisnikService.getInstance();
     
+    // detalji o korisniku
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Korisnik getCustomerById(@PathParam("username") String username) throws RacunarskaOpremaException {
-        return korisnikService.findCustomer(username);
+    public Korisnik getKorisnik(@PathParam("username") String username) throws RacunarskaOpremaException {
+        return korisnikService.findKorisnik(username);
     }
     
+    
+    // ne radi; dodavanje korisnika
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addKorisnik(Korisnik korisnik) throws RacunarskaOpremaException{
+        korisnikService.addNewKorisnik(korisnik);
+        return Response.ok().build();
+    }
     
 }

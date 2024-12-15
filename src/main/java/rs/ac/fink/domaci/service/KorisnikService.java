@@ -36,8 +36,8 @@ public class KorisnikService {
             ResourcesManager.closeConnection(con);
         }
     }
-    
-    public Korisnik findCustomer(String username) throws RacunarskaOpremaException {
+  
+    public Korisnik findKorisnik(String username) throws RacunarskaOpremaException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
@@ -51,7 +51,7 @@ public class KorisnikService {
         }
     }
     
-    public void deleteCustomer(String username) throws RacunarskaOpremaException {
+    public void deleteKorisnik(String username) throws RacunarskaOpremaException {
         Connection con = null;
         try {
             con = ResourcesManager.getConnection();
