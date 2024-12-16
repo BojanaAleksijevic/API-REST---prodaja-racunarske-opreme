@@ -36,6 +36,23 @@ public class KorisnikDAO {
         return korisnik;
     }
     
+    public Korisnik findID(int korisnik_id, Connection con) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Korisnik korisnik = null;
+        try {
+            ps = con.prepareStatement("SELECT * FROM korisnik where korisnik_id=?");
+            ps.setInt(1, korisnik_id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                korisnik = new Korisnik(rs.getString("ime_i_prezime"),rs.getString("username"), rs.getString("password"), rs.getString("e_mail"), rs.getString("datum_rodjenja"), rs.getInt("stanje_racuna"), rs.getInt("kolicina_potrosenog_novca"));
+            }
+        } finally {
+            ResourcesManager.closeResources(rs, ps);
+        }
+        return korisnik;
+    }
+    
     public int insert(Korisnik korisnik, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -63,15 +80,10 @@ public class KorisnikDAO {
     public void update(Korisnik korisnik, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("UPDATE korisnik SET ime_i_prezime=?, username=?, password=?, e_mail=?, datum_rodjenja=?, stanje_racuna=?, kolicina_potrosenog_novca=?  WHERE username=?");
-            ps.setString(1, korisnik.getImeIPrezime());
-            ps.setString(2, korisnik.getUsername());
-            ps.setString(3, korisnik.getPassword());
-            ps.setString(4, korisnik.getEmail());
-            
-            ps.setString(5, korisnik.getDatumRodjenja());
-            ps.setInt(6, korisnik.getStanjeRacuna());
-            ps.setInt(7, korisnik.getKolicinaPotrosenogNovca());
+            ps = con.prepareStatement("UPDATE korisnik SET stanje_racuna=?, kolicina_potrosenog_novca=?  WHERE username=?");
+            ps.setInt(1, korisnik.getStanjeRacuna());
+            ps.setInt(2, korisnik.getKolicinaPotrosenogNovca());
+            ps.setString(3, korisnik.getUsername());
             
             
             ps.executeUpdate();
@@ -91,6 +103,24 @@ public class KorisnikDAO {
         } finally {
             ResourcesManager.closeResources(null, ps);
         }
+    }
+    
+    public String login(String username, String password, Connection con) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM korisnik WHERE username = ? AND password = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    if (count > 0) {
+                        return "true"; // Pronađen korisnik
+                    }
+                }
+            }
+        }
+        return "false"; // Korisnik nije pronađen
     }
     
 }

@@ -28,7 +28,6 @@ public class KorisnikRest {
     }
     
     
-    // ne radi; dodavanje korisnika
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,4 +36,24 @@ public class KorisnikRest {
         return Response.ok().build();
     }
     
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateKorisnika(Korisnik korisnik) throws RacunarskaOpremaException {
+            korisnikService.updateKorisnik(korisnik);
+            return Response.ok().build();
+    }
+    
+    
+    // login
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(Korisnik korisnik) throws RacunarskaOpremaException {
+        String result = korisnikService.login(korisnik.getUsername(), korisnik.getPassword());
+        if (result != null) {
+            return Response.ok(result).build(); 
+        }
+        return null;
+    }
 }

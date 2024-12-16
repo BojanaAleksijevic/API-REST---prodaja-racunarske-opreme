@@ -11,3 +11,4 @@ Commit :
 * Prikaz podataka o korisniku prilikom dobrodoslice
 * Podesavanje pretrage (donja i gornja granica, vrsta, kljucna rec)
 * Kupovina proizvoda (nije u funkciji)
+* login korisnika

@@ -28,8 +28,8 @@ public class KupovinaDAO {
             ps.setInt(1, kupovina_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                Korisnik korisnik = KorisnikDAO.getInstance().find(rs.getString("korisnik_id"), con);
-                Proizvod proizvod = ProizvodDAO.getInstance().find(rs.getString("proizvod_id"), con);
+                Korisnik korisnik = KorisnikDAO.getInstance().findID(rs.getInt("korisnik_id"), con);
+                Proizvod proizvod = ProizvodDAO.getInstance().findID(rs.getInt("proizvod_id"), con);
                 kupovina = new Kupovina(kupovina_id, korisnik, proizvod);
             }
         } finally {
@@ -44,7 +44,7 @@ public class KupovinaDAO {
         int id = -1;
         try {
             ps = con.prepareStatement("INSERT INTO kupovina(korisnik_id, proizvod_id) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, kupovina.getKorisnik().getUsername());
+            ps.setInt(1, kupovina.getKorisnik().getKorisnikID());
             ps.setInt(2, kupovina.getProizvod().getProizvodID());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
@@ -56,6 +56,7 @@ public class KupovinaDAO {
         return id;
     }
     
+
     public void delete(Korisnik korisnik, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {

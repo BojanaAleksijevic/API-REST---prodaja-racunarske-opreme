@@ -28,6 +28,11 @@ public class KupovinaService {
         try {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
+            
+            System.out.println("Stanje korisnika: " + korisnik.getStanjeRacuna());
+            System.out.println("Cena proizvoda: " + proizvod.getCena());
+            System.out.println("Stanje na lageru: " + proizvod.getStanjeNaLageru());
+
 
             if (proizvod.getStanjeNaLageru() == 0) {
                 throw new RacunarskaOpremaException("There are no more products " + proizvod.getNaziv() + " in the store.");
@@ -40,6 +45,11 @@ public class KupovinaService {
             //umanji stanje na racunu kupca 
             int novoStanjeRacuna = korisnik.getStanjeRacuna() - proizvod.getCena();
             korisnik.setStanjeRacuna(novoStanjeRacuna);
+            KorisnikDAO.getInstance().update(korisnik, con);
+            
+            //povecaj kolicinu potrosenog novca
+            int novaKolicinaPotrosenog = korisnik.getKolicinaPotrosenogNovca() + proizvod.getCena();
+            korisnik.setKolicinaPotrosenogNovca(novaKolicinaPotrosenog);
             KorisnikDAO.getInstance().update(korisnik, con);
 
             //smanjiti kolicinu proizvoda koji je prodat
@@ -56,6 +66,22 @@ public class KupovinaService {
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
             throw new RacunarskaOpremaException("Failed to make a purchase.", ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+    
+    
+    
+    public Kupovina findKupovina(int kupovina_id) throws RacunarskaOpremaException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+
+            return KupovinaDAO.getInstance().find(kupovina_id, con);
+
+        } catch (SQLException ex) {
+            throw new RacunarskaOpremaException("Failed to find " + kupovina_id, ex);
         } finally {
             ResourcesManager.closeConnection(con);
         }

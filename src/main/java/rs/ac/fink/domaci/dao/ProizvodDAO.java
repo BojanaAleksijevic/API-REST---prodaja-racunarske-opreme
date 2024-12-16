@@ -58,16 +58,29 @@ public class ProizvodDAO {
         }
         return product;
     }
+     public Proizvod findID(int proizvod_id, Connection con) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Proizvod product = null;
+        try {
+            ps = con.prepareStatement("SELECT * FROM proizvod WHERE proizvod_id=?");
+            ps.setInt(1, proizvod_id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                product = new Proizvod(rs.getInt("proizvod_id"), rs.getString("naziv"), rs.getInt("cena"),rs.getString("vrsta_opreme"), rs.getInt("stanje_na_lageru"));
+            }
+        } finally {
+            ResourcesManager.closeResources(rs, ps);
+        }
+        return product;
+    }
     
     public void update(Proizvod proizvod, Connection con) throws SQLException {
         PreparedStatement ps = null;
         try {
-            ps = con.prepareStatement("UPDATE proizvod SET naziv=?, cena=?, vrsta_opreme=?, stanje_na_lageru=? WHERE proizvod_id=?");
-            ps.setString(1, proizvod.getNaziv());
-            ps.setInt(2, proizvod.getCena());
-            ps.setString(3, proizvod.getVrstaOpreme());
-            ps.setInt(4, proizvod.getStanjeNaLageru());
-            ps.setInt(5, proizvod.getProizvodID());
+            ps = con.prepareStatement("UPDATE proizvod SET stanje_na_lageru=? WHERE proizvod_id=?");
+            ps.setInt(1, proizvod.getStanjeNaLageru());
+            ps.setInt(2, proizvod.getProizvodID());
             ps.executeUpdate();
         } finally {
             ResourcesManager.closeResources(null, ps);

@@ -70,5 +70,35 @@ public class KorisnikService {
             ResourcesManager.closeConnection(con);
         }
     }
+    
+    
+    /*proba*/
+    public void updateKorisnik(Korisnik korisnik) throws RacunarskaOpremaException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+            con.setAutoCommit(false);
 
+            KorisnikDAO.getInstance().update(korisnik, con);
+
+            con.commit();
+        } catch (SQLException ex) {
+            ResourcesManager.rollbackTransactions(con);
+            throw new RacunarskaOpremaException("Failed to update korisnik " + korisnik, ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
+    
+    public String login(String username, String password) throws RacunarskaOpremaException {
+        Connection con = null;
+        try {
+            con = ResourcesManager.getConnection();
+            return KorisnikDAO.getInstance().login(username, password, con);
+        } catch (SQLException ex) {
+            throw new RacunarskaOpremaException("Login failed for username " + username, ex);
+        } finally {
+            ResourcesManager.closeConnection(con);
+        }
+    }
 }
