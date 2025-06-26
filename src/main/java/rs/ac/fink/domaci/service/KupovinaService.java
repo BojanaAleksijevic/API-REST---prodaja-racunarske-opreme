@@ -29,40 +29,48 @@ public class KupovinaService {
             con = ResourcesManager.getConnection();
             con.setAutoCommit(false);
             
-            System.out.println("Stanje korisnika: " + korisnik.getStanjeRacuna());
-            System.out.println("Cena proizvoda: " + proizvod.getCena());
-            System.out.println("Stanje na lageru: " + proizvod.getStanjeNaLageru());
-
-
-            if (proizvod.getStanjeNaLageru() == 0) {
-                throw new RacunarskaOpremaException("There are no more products " + proizvod.getNaziv() + " in the store.");
+            Korisnik k = KorisnikDAO.getInstance().findID(korisnik.getKorisnikID(), con);
+            if (k == null) {
+                throw new RacunarskaOpremaException("Korisnik sa ID-jem " + korisnik.getKorisnikID() + " ne postoji.");
             }
 
-            if (korisnik.getStanjeRacuna() < proizvod.getCena()) {
-                throw new RacunarskaOpremaException("Customer doesn't have enough credit to make a purchase. Customer's credit is " + korisnik.getStanjeRacuna() + ", price of the product is " + proizvod.getCena());
+            Proizvod p = ProizvodDAO.getInstance().findID(proizvod.getProizvodID(), con);
+            if (p == null) {
+                throw new RacunarskaOpremaException("Proizvod sa ID-jem " + proizvod.getProizvodID() + " ne postoji.");
             }
-
-            //umanji stanje na racunu kupca 
-            int novoStanjeRacuna = korisnik.getStanjeRacuna() - proizvod.getCena();
-            korisnik.setStanjeRacuna(novoStanjeRacuna);
-            KorisnikDAO.getInstance().update(korisnik, con);
             
-            //povecaj kolicinu potrosenog novca
-            int novaKolicinaPotrosenog = korisnik.getKolicinaPotrosenogNovca() + proizvod.getCena();
-            korisnik.setKolicinaPotrosenogNovca(novaKolicinaPotrosenog);
-            KorisnikDAO.getInstance().update(korisnik, con);
+            System.out.println("Stanje korisnika: " + k.getStanjeRacuna());
+            System.out.println("Cena proizvoda: " + p.getCena());
+            System.out.println("Stanje na lageru: " + p.getStanjeNaLageru());
+
+
+
+            // Provera lagera i stanja racuna
+            if (p.getStanjeNaLageru() == 0) {
+                throw new RacunarskaOpremaException("There are no more products " + p.getNaziv() + " in the store.");
+            }
+
+            if (k.getStanjeRacuna() < p.getCena()) {
+                throw new RacunarskaOpremaException("Customer " + k.getUsername() + " doesn't have enough credit to make a purchase. Customer's credit is " + k.getStanjeRacuna() + ", price of the product is " + p.getCena());
+            }
+
+            
+            //umanji stanje na racunu kupca i povecaj kolicinu potrosenog novca
+            int novoStanjeRacuna = k.getStanjeRacuna() - p.getCena();
+            int novaKolicinaPotrosenog = k.getKolicinaPotrosenogNovca() + p.getCena();
+            
+            k.setStanjeRacuna(novoStanjeRacuna);
+            k.setKolicinaPotrosenogNovca(novaKolicinaPotrosenog);
+            KorisnikDAO.getInstance().update(k, con);
 
             //smanjiti kolicinu proizvoda koji je prodat
-            proizvod.setStanjeNaLageru(proizvod.getStanjeNaLageru() - 1);
-            ProizvodDAO.getInstance().update(proizvod, con);
+            p.setStanjeNaLageru(p.getStanjeNaLageru() - 1);
+            ProizvodDAO.getInstance().update(p, con);
 
-            //track of purchase in database
-            Kupovina kupovina = new Kupovina(korisnik, proizvod);
-            KupovinaDAO.getInstance().insert(kupovina, con);
+            KupovinaDAO.getInstance().insert(k, p, con);
 
             con.commit();
 
-            System.out.println("Korisnik " + korisnik.getUsername() + " je kupio proizvod " + proizvod.getNaziv() + " koji kosta " + proizvod.getCena());
         } catch (SQLException ex) {
             ResourcesManager.rollbackTransactions(con);
             throw new RacunarskaOpremaException("Failed to make a purchase.", ex);
@@ -70,6 +78,7 @@ public class KupovinaService {
             ResourcesManager.closeConnection(con);
         }
     }
+    
     
     
     

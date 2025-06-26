@@ -19,21 +19,22 @@ import rs.ac.fink.domaci.service.KorisnikService;
 public class KorisnikRest {
     private final KorisnikService korisnikService = KorisnikService.getInstance();
     
-    // detalji o korisniku
-    @GET
-    @Path("/{username}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Korisnik getKorisnik(@PathParam("username") String username) throws RacunarskaOpremaException {
-        return korisnikService.findKorisnik(username);
-    }
     
-    
+    // dodavanje korisnika
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addKorisnik(Korisnik korisnik) throws RacunarskaOpremaException{
         korisnikService.addNewKorisnik(korisnik);
         return Response.ok().build();
+    }
+    
+    // detalji o korisniku
+    @GET
+    @Path("/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Korisnik getKorisnik(@PathParam("username") String username) throws RacunarskaOpremaException {
+        return korisnikService.findKorisnik(username);
     }
     
     @PUT

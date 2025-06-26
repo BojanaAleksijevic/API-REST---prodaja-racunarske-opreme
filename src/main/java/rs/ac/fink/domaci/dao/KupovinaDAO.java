@@ -38,22 +38,31 @@ public class KupovinaDAO {
         return kupovina;
     }
     
-    public int insert(Kupovina kupovina, Connection con) throws SQLException {
+    public int insert(Korisnik korisnik, Proizvod proizvod, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        int id = -1;
+        int korisnikId = -1;
+        ps = con.prepareStatement("SELECT korisnik_id FROM Korisnik WHERE username = ?");
+        ps.setString(1, korisnik.getUsername());
+        rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            korisnikId = rs.getInt("korisnik_id");
+        }
         try {
-            ps = con.prepareStatement("INSERT INTO kupovina(korisnik_id, proizvod_id) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, kupovina.getKorisnik().getKorisnikID());
-            ps.setInt(2, kupovina.getProizvod().getProizvodID());
-            ps.executeUpdate();
-            rs = ps.getGeneratedKeys();
-            rs.next();
-            id = rs.getInt(1);
+            if (korisnikId != -1) {
+                ps = con.prepareStatement("INSERT INTO Kupovina(korisnik_id, proizvod_id) VALUES(?,?)");
+                ps.setInt(1, korisnikId);
+                ps.setInt(2, proizvod.getProizvodID());
+                ps.executeUpdate(); 
+            }
+            else if (korisnikId == -1) {
+                throw new SQLException("Username " + korisnik.getUsername() + " is not found.");
+            }
         } finally {
             ResourcesManager.closeResources(rs, ps);
         }
-        return id;
+        return korisnikId;
     }
     
 

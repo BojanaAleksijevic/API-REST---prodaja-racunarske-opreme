@@ -58,7 +58,8 @@ public class ProizvodDAO {
         }
         return product;
     }
-     public Proizvod findID(int proizvod_id, Connection con) throws SQLException {
+    
+    public Proizvod findID(int proizvod_id, Connection con) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Proizvod product = null;

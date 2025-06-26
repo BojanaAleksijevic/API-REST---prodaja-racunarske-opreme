@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 
 public class Korisnik implements Serializable{
-    private int korisnik_id=-1;
+    private int korisnik_id;
     private String ime_i_prezime;
     private String username;
     private String password;
@@ -53,6 +53,10 @@ public class Korisnik implements Serializable{
         return korisnik_id;
     }
 
+    public void setKorisnikID(int korisnik_id) {
+        this.korisnik_id = korisnik_id;
+    }
+    
     public String getImeIPrezime() {
         return ime_i_prezime;
     }

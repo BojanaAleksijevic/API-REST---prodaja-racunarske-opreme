@@ -51,26 +51,6 @@ public class KorisnikService {
         }
     }
     
-    public void deleteKorisnik(String username) throws RacunarskaOpremaException {
-        Connection con = null;
-        try {
-            con = ResourcesManager.getConnection();
-            con.setAutoCommit(false);
-
-            Korisnik korisnik = KorisnikDAO.getInstance().find(username, con);
-            if (korisnik != null) {
-                KorisnikDAO.getInstance().delete(username, con);
-            }
-
-            con.commit();
-        } catch (SQLException ex) {
-            ResourcesManager.rollbackTransactions(con);
-            throw new RacunarskaOpremaException("Failed to delete korisnik with username " + username, ex);
-        } finally {
-            ResourcesManager.closeConnection(con);
-        }
-    }
-    
     
     /*proba*/
     public void updateKorisnik(Korisnik korisnik) throws RacunarskaOpremaException {
